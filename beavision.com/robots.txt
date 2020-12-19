@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /cms/
+Disallow: /ax*.php
+Sitemap: https://beavision.com/sitemap.xml

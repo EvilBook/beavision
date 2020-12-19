@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>shop.beavision.com</title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+<meta name="description" content="Описание" />
+<meta name="Author" content="www.shopiko.bg" />
+<meta name="Copyright"/>
+<meta name="geo.placename"/>
+<meta name="geo.position"/>
+<meta content="index,follow" name="robots"/>
+
+<link rel="canonical" href="login.html" />
+
+<meta property="og:title" content="shop.beavision.com"/>
+<meta property="og:site_name" content="shop.beavision.com"/>
+<meta property="og:description" content="Описание"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="static/common/img/default-favicon.ico" />
+<link rel="stylesheet" type="text/css" href="static/universal/styles/master.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="default.css" media="screen" />
+<script type="text/javascript" src="static/universal/scripts/jquery.min.js"></script>
+<script type="text/javascript" src="https://beavision.com/static/universal/scripts/main.js"></script>
+
+    <style>
+        .agree-terms .inline {display: inline; line-height: 1.3; padding-left: 20px}
+        .agree-terms .inline a {text-decoration: underline;}
+
+        .agree-terms input[type="checkbox"] {display: inline-block; width: auto; height: auto; margin-right: 5px; position: absolute; top: 1px; left: 0;}
+        .custError {border-bottom: 1px solid #ba0000;}
+    </style>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+login = function() {
+	$.post(
+			'/axAuthorize.php',
+			$('#loginFrm').serialize(),
+			function(data) {
+				if(data.result == 'ok')
+					document.location.href = '/welcome.html';
+				else {
+					$('#forgottenEmail').val($('#usernameInp').val());
+					$('#passwordInp').val('');
+					$('#emailContain').html($('#usernameInp').val()+' ?');
+					$('#passSentAuto').hide();
+					$('#wrongCaptchaContain').html('');
+					$('#wrongPassContain').fadeIn();
+					$('#forgottenCaptchaAuto').attr('src','captcha.php?977418989')
+				}
+			},
+			'json'
+		);
+}
+
+sendForgottenPassAuto = function() {
+	$('#forgottenEmail').val($('#usernameInp').val());
+	$('#emailContain').html($('#usernameInp').val()+' ?');
+	$.post(
+			'/axForgottenPass.php',
+			$('#forgottenFrmAuto').serialize(),
+			function(data) {
+				if(data.result == 'ok') {
+					$('#wrongPassContain').hide().html('<p><b>Линк за смяна на паролата е изпратен на посочения имейл адрес.</b></p>').fadeIn();
+					setTimeout(function() {
+						$('#wrongPassContain').fadeOut('slow');
+					}, 3000);
+				} else if(data.result == 'captchaError')
+					$('#wrongCaptchaContain').hide().html('Числото, което сте въвели е грешно!').fadeIn();
+				else
+					$('#wrongCaptchaContain').hide().html('<br /><p>Посочения имейл адрес не съществува в нашата база данни.</p>').fadeIn();
+
+			},
+			'json'
+		);
+}
+
+sendForgottenPass = function() {
+	$.post(
+			'/axForgottenPass.php',
+			$('#forgottenPassFrm').serialize(),
+			function(data) {
+				if(data.result == 'ok') {
+					$('#forgottenPassMsg').hide().fadeIn();
+					$('#forgottenPassMsg p').html('<b>Линк за смяна на паролата е изпратен на посочения имейл адрес.</b><br />');
+				} else if(data.result == 'captchaError') {
+					$('#forgottenPassMsg').hide().fadeIn();
+					$('#forgottenPassMsg p').html('Числото, което сте въвели е грешно!<br />');
+				} else {
+					$('#forgottenPassMsg').hide().fadeIn();
+					$('#forgottenPassMsg p').html('<br /><p>Посочения имейл адрес не съществува в нашата база данни.</p><br />').fadeIn();
+				}
+
+			},
+			'json'
+		);
+}
+
+showForgottenPassForm = function() {
+	$('#login').fadeOut(function() {
+		$('#forgottenPass').fadeIn();
+		$('#forgottenCaptcha').attr('src','captcha.php?mode=2&a=2036404367')
+	});
+}
+
+showRegisterForm = function() {
+	$('#login').hide();
+	$('#requestAccount').fadeIn();
+	$('#registerCaptcha').attr('src','captcha.php?mode=2&a=1518313338')
+}
+
+registerNew = function() {
+	$('#registerNewConatin').hide();
+	$('#userAlreadyExists').hide();
+	var agreeTextEl = $('input[name="agreeWithTerms"]').parent('label').find('.inline');
+
+    if($('input[name="agreeWithTerms"]').length > 0) {
+        if($('input[name="agreeWithTerms"]:checked').length == 0) {
+            agreeTextEl.addClass('custError');
+            return;
+        }
+    }
+
+    agreeTextEl.removeClass('custError');
+    $.post(
+            '/axRegisterNew.php',
+            $('#requestAccountFrm').serialize(),
+            function(data) {
+                if(data.result == 'ok') {
+                    $('#requestAccountFrm').fadeOut('fast', function() {
+                        $('#title').html('Регистрирахте се успешно');
+                        $('#descr').html('<p><b>Регистрацията премина успешно. Ще получите имейл за потвърждение.</b></p><br />').fadeIn();
+                    });
+                    $(document).trigger({type: 'user:registered', email: $('#registerEmlInp').val()});
+                } else if(data.result == 'captchaError') {
+                    $('#registerNewConatin').html('Числото, което сте въвели е грешно!<br />').fadeIn();
+                } else if(data.result == 'userAlreadyExists') {
+                    $('#emlExists').html($('#registerEmlInp').val());
+                    $('#emlExists1').html($('#registerEmlInp').val()+' ?');
+                    $('#userAlreadyExists').fadeIn();
+                }
+
+            },
+            'json'
+    );
+};
+
+sendForgottenPassAutoRegister = function() {
+	$('#registerNewConatin').hide();
+	$('#userAlreadyExists').hide();
+	$.post(
+			'/axForgottenPass.php',
+			$('#requestAccountFrm').serialize(),
+			function(data) {
+				if(data.result == 'ok') {
+					$('#registerNewConatin').html('<p><b>Линк за смяна на паролата е изпратен на посочения имейл адрес.</b></p>').fadeIn();
+				}
+
+			},
+			'json'
+		);
+}
+
+$(document).ready(function() {
+	if(window.location.hash == '#showForgottenPassForm')
+		showForgottenPassForm();
+
+	$('#loginFrm input').keypress(function(e) {
+	    if (e.which == 13) {
+	        e.preventDefault();
+	        login();
+	    }
+	});
+
+});
+
+/* ]]> */
+</script>
+
+
+
+</head>
+<body>
+<!-- <h1>Universal Header</h1> -->
+<header>
+<div class="checkout">
+	<div class="logo-holder">
+        <a class="logo" href="index.html" title="shop.beavision.com" >
+			<img src="media/42/19.png" alt="shop.beavision.com"/>
+		</a>
+	</div>
+	<div class="header-text">
+	<span class="phone">София: 02 988 25 43, факс 02 988 25 43, GSM 0898 58 25 43; Пловдив: 032 23 10 40, GSM 0898 58 60 06; Плевен: 064 80 16 72, GSM 0898 58 39 87</span>
+		
+		<a href="catalog.html" title="Обратно в магазина">Обратно в магазина</a>
+	</div>
+</div>	
+</header><section class="breadcrumbs"><div class="checkout">&nbsp;</div></section>
+<section class="checkout login">  
+	<div class="checkout-content">
+        <h1 id="title">Вход за клиенти</h1>
+		<div id="descr" class="login-desc pull-left enter-num">				<p>Потребителски профил имат всички клиенти на магазина, които са реализирали поне една поръчка. Потребителският профил се създава автоматично при поръчка и може да бъде достъпен по всяко време. Тук може да следите статуса на активните си поръчки. </p>
+				<p>Ползвайки своя потребителски акаунт, няма да Ви се налага да въвеждате своите данни всеки път, когато искате да поръчате някой от нашите продукти.</p>
+</div>
+
+
+		<div id="login" class="body">
+<!-- Login Box -->
+		        <form id="loginFrm" class="login-form" method="post" enctype="multipart/form-data">
+		                <label for="usernameInp">
+		                	<span>* Имейл</span>
+		                	<input id="usernameInp" type="email" name="username" class="textfield type3" autocomplete="username" />
+		                </label>
+		                <label>
+		                	<span>* Парола</span>
+		                	<input id="passwordInp" type="password" name="password" class="textfield type3" autocomplete="current-password" />
+		                </label>
+		                <div class="btn-holder">
+			            	<input id="submitBtn" onclick="login()" class="submit" type="button" value="Вход" />
+			            	<a href="javascript:showRegisterForm();" title="" class="clr fleft">Регистрирай се</a>
+			            	<a href="javascript:showForgottenPassForm();" title="" class="fright">Забравена парола</a>
+			            </div>
+		        </form>
+<!-- Auto Pass Recover -->
+		        <div id="wrongPassContain" class="login-info visible">
+		        	<div class="arrow"></div>
+		        	<div class="login-text">Въведените данни са грешни.<br />Моля въведете коректни данни. Ако сте забравили своята парола, можем да изпратим нова парола на посочения имейл адрес.
+</div><br />
+
+		        	<form id="forgottenFrmAuto" class="login-form no_margin">
+		                <p class="send-new">
+		                	<span class="no-bold">Искате ли да изпратим нова парола на:</span> <b id="emailContain"></b>
+		                </p>
+		                <p class="enter-num">Въведете числото</p>
+		                <label>
+		                	<span class="captcha-code"><img id="forgottenCaptchaAuto" src="" alt="Въведете числото" /></span>
+		                	<input class="textfield type2"  type="text" name="captcha"/>
+							<input id="forgottenEmail" type="hidden" name="email" value="" />
+		                </label>
+		                <div class="btn-holder">
+		                	<input class="button-send-pass submit" type="button" onclick="sendForgottenPassAuto()" value="Изпрати парола" />
+		                </div>
+		                <p id="wrongCaptchaContain" class="wrong-num visible"></p>
+		        	</form>
+		        </div>
+		</div>
+
+
+<!-- Forgotten Pass Recover -->
+		<div id="forgottenPass" class="body visible">
+			<form id="forgottenPassFrm" class="login-form">
+	        	<label for="reg-email" class="">
+	        		<span>Имейл</span>
+	        		<input name="email" class="textfield type3" type="email" id="reg-email" placeholder="Имейл, с който сте регистриран" />
+	            </label>
+	            <p class="enter-num">Въведете кода от картинката:</p>
+	            <label for="enter-code">
+	            	<span class="captcha-code"><img id="forgottenCaptcha" src="" alt="Въведете кода от картинката"/></span>
+	            	<input class="textfield type2"  type="text" id="enter-code" name="captcha"/>
+	            </label>
+	            <div class="btn-holder">
+	            	<input onclick="sendForgottenPass()" class="button submit" type="button" value="Изпрати парола" />
+	            	<a href="login.html" title="" class="clr fleft">Вход за клиенти</a>
+	        	</div>
+	        </form>
+	        
+	        <div id="forgottenPassMsg" class="login-info visible">
+		        <div class="arrow"></div>
+		        <p></p>
+	        </div>
+		</div>
+
+
+<!-- Register -->
+		<div id="requestAccount" class="body visible">
+	        <form id="requestAccountFrm" class="login-form">
+		       	<label for="enter-email" class="">
+		       		<span>Имейл</span>
+		       		<input id="registerEmlInp" type="email" name="email" class="textfield type3" placeholder="Въведете Ваш имейл адрес" />
+	            </label>
+	            <p class="login-fail enter-num">							Имейл адреса, който въведете, ще бъде Вашето потребителско име. <br />
+							Въведете реален имейл адрес, на който ще изпратим паролата за Вашата регистрация<br /><br />
+</p>
+
+                <label class="agree-terms" style="">
+                    <input id="newsletter" class="promo" name="client[acceptsNewsletters]" type="checkbox" value="1" type="checkbox" >
+                    <div class="inline">Желая да получавам промоционални съобщения и новини (не задължително)</div>
+                </label>
+
+                
+
+
+
+
+	            <p class="enter-num">Въведете кода от картинката:</p>
+	            <label for="enter-code2">
+	            	<span class="captcha-code"><img id="registerCaptcha" src=""  alt="Въведете кода от картинката" /></span>
+	            	<input name="captcha" class="textfield type2"  type="text" id="enter-code2"/>
+	            </label>
+	            <div class="btn-holder">
+	            	<input onclick="registerNew()" class="button submit" type="button" value="Изискай регистрация" />
+	            	<a href="login.html" title="" class="clr fleft">Вход за клиенти</a>
+	        	</div>
+	        </form>
+
+	        <div id="registerNewConatin" class="login-info visible"><div class="arrow"></div></div>
+	        <div id="userAlreadyExists" class="login-info visible">
+	        	<div class="arrow"></div>
+	        	<div class="login-text">
+	                Вече съществува потребител с посочения имейл адрес:<br /><strong id="emlExists"></strong>
+	                <p class="bottom">Ако този имейл е Ваш, може да поискате нова парола за вход.</p>
+	            </div>
+	        	<form class="login-form no_margin">
+	                <p class="send-new"><span class="no-bold">Искате ли да изпратим нова парола на:</span> <strong id="emlExists1">?</strong></p>
+	                <input onclick="sendForgottenPassAutoRegister()" class="button-send-pass" type="button" value="Изпрати парола" />
+	        	</form>
+	        </div>
+
+		 <div class="clear"></div>    
+		</div>
+	</div>
+</section>
+<footer>
+	<div class="checkout">
+		<div class="pull-left">
+			<a href="index.html" title="Начало">Начало</a>
+			<a href="delivery.html" title="Общи условия">Общи условия</a>
+			<a href="bg-content-details-4.html" title="Доставка">Доставка</a>
+			<span class="copy">Copyright &copy; 2020. All Rights Reserved</span>
+		</div>
+		<div class="pull-right">
+			<span class="phone">София: 02 988 25 43, факс 02 988 25 43, GSM 0898 58 25 43; Пловдив: 032 23 10 40, GSM 0898 58 60 06; Плевен: 064 80 16 72, GSM 0898 58 39 87</span>
+			<a href="contact-information.html" title="Контакти">Контакти</a>
+            <br>
+		</div>
+	</div>
+</footer>
+</body>
+</html>

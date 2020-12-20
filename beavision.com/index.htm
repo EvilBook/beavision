@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+<title>shop.beavision.com</title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+<meta name="description" content="Описание" />
+<meta name="Author" content="www.shopiko.bg" />
+<meta name="Copyright"/>
+<meta name="geo.placename"/>
+<meta name="geo.position"/>
+<meta content="index,follow" name="robots"/>
+
+<link rel="canonical" href="https://beavision.com/" />
+
+<meta property="og:title" content="shop.beavision.com"/>
+<meta property="og:site_name" content="shop.beavision.com"/>
+<meta property="og:description" content="Описание"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/static/common/img/default-favicon.ico" />
+<link rel="stylesheet" type="text/css" href="/static/universal/styles/master.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/default.css" media="screen" />
+
+<script type="text/javascript" src="/static/universal/scripts/jquery.min.js"></script>
+<script type="text/javascript" src="/static/universal/scripts/swfobject.js"></script>
+<script type="text/javascript">
+loginLockPublic = function() {
+	$.post(
+		'/error-loginLockPublic.html',
+		$('#passInp').serialize(),
+		function(data) {
+			if(data.result == 'OK')
+				document.location.href = '/';
+			else {
+				$('#errorCont').html(' Грешна парола ').fadeIn();
+				setTimeout(function() {$('#errorCont').fadeOut();} , 3000);
+			}
+		},
+		'json'
+	);
+}
+
+$(document).ready(function() {
+	$('#passInp').keydown(function(e) {
+			if (e.which == '13') {
+				e.preventDefault();
+				loginLockPublic();
+				return false;
+			}
+			return true;
+		});
+});
+</script>
+
+
+
+</head>
+<body>
+<!-- <h1>Universal Header</h1> -->
+<header>
+<div class="checkout">
+	<div class="logo-holder">
+        <a class="logo" href="/" title="shop.beavision.com" >
+			<img src="/media/42/19.png" alt="shop.beavision.com"/>
+		</a>
+	</div>
+	<div class="header-text">
+	<span class="phone">София: 02 988 25 43, факс 02 988 25 43, GSM 0898 58 25 43; Пловдив: 032 23 10 40, GSM 0898 58 60 06; Плевен: 064 80 16 72, GSM 0898 58 39 87</span>
+		
+		<a href="/catalog.html" title="Обратно в магазина">Обратно в магазина</a>
+		<a href="/login.html" title="Вход за клиенти">Вход за клиенти</a>
+	</div>
+</div>	
+</header>
+<section class="breadcrumbs"><div class="checkout">&nbsp;</div></section>
+<section class="checkout login">
+	<div class="checkout-content">
+		<h1 id="title">Магазинът е временно недостъпен</h1>
+		<div id="descr" class="login-desc pull-left enter-num">Моля, посетете ни по-късно.<br /><br /><br /></div>
+		
+		<div id="login" class="body">
+			<form action="">
+			<label for="passInp">
+				<span>* Парола</span>
+				<input id="passInp" name="pass" type="password" class="textfield type3" placeholder="Ако това е вашият магазин, въведете паролата" />
+			</label>
+			<div class="btn-holder">
+				<input id="submitBtn" onclick="loginLockPublic()" class="submit" type="button" value="Вход" />
+			</div>
+			<span id="errorCont" style="color:red;"></span>
+			</form>
+		</div>
+
+
+	</div>
+</section>
+<footer>
+	<div class="checkout">
+		<div class="pull-left">
+			<a href="/" title="Начало">Начало</a>
+			<a href="/delivery.html" title="Общи условия">Общи условия</a>
+			<a href="/bg-content-details-4.html" title="Доставка">Доставка</a>
+			<span class="copy">Copyright &copy; 2020. All Rights Reserved</span>
+		</div>
+		<div class="pull-right">
+			<span class="phone">София: 02 988 25 43, факс 02 988 25 43, GSM 0898 58 25 43; Пловдив: 032 23 10 40, GSM 0898 58 60 06; Плевен: 064 80 16 72, GSM 0898 58 39 87</span>
+			<a href="/contact-information.html" title="Контакти">Контакти</a>
+            <br>
+            <span class="powered-by">Онлайн магазин създаден с  <a href="http://www.shopiko.bg" title="Oнлайн магазин от Shopiko" target="_blank">Shopiko</a></span>
+		</div>
+	</div>
+</footer>
+<script>
+$(document).bind('product:addToCart', function(event) {
+    if(typeof gtag === 'undefined')
+        return;
+
+    gtag('event', 'add_to_cart', { 
+        "items" : [
+            {"id": event.productId}
+        ] 
+    });
+});
+
+$(document).bind('product:removeFromCart', function(event) {
+    if(typeof gtag === 'undefined')
+        return;
+
+    if(event.sku)
+        event.sku = parseInt(event.sku);
+    gtag('event', 'remove_from_cart', { 
+        "items" : [
+            {"id": event.sku}
+        ] 
+    });
+});
+
+$(document).bind('product:quickOrder', function(event) {
+    if(typeof gtag === 'undefined')
+        return;
+
+    gtag('event', 'fast_order', { 
+        "value" : event.totalAmount
+    });
+});
+
+$('#gs-contact-form').bind('submit', function(event) {
+    if(typeof gtag === 'undefined')
+        return;
+
+    gtag('event', 'contact_form_sent');
+});
+
+</script></body>
+</html>

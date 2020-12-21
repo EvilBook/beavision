@@ -861,11 +861,20 @@ $('#gs-contact-form').bind('submit', function(event) {
 });
 
 </script>
-<div id="notification" class="closed"><div id="title"><h1>Важно!</h1></div><div id="notif-body"><span>За продуктови цени, пълен каталог и други запитваня моля пишете на <email>beavision2000@yahoo.com</email> или се обадете на София: 02 988 25 43, факс 02 988 25 43, GSM 0898 58 25 43; Пловдив: 032 23 10 40, GSM 0898 58 60 06; Плевен: 064 80 16 72, GSM 0898 58 39 87</span></div></div>
-
+<div id="notification-wrapper" class="closed">
+	<div id="notification">
+		<div id="title">
+			<h2>Важно!</h2>
+		</div>
+		<div id="notif-body"><p>За продуктови цени, пълен каталог и други запитваня моля пишете на <a href="mailto:beavision2000@yahoo.com">beavision2000@yahoo.com</a>
+			<br/> или се обадете на някой от следните телефони: <br/><a href="tel:02 988 25 43">София: 02 988 25 43</a>/<a href="tel:0898 58 25 43">0898 58 25 43</a>, факс 02 988 25 43;<br/><a href="tel:0898 58 60 06">Пловдив: 0898 58 60 06</a>;<br/> <a href="tel:0898 58 39 87">Плевен: 0898 58 39 87</a>
+		</p>
+		</div>
+	</div>
+</div>
 <script>
 	let seen=document.cookie
-	let notification=document.getElementById('notification')
+	let notification=document.getElementById('notification-wrapper')
 	if(notification.classList.contains('closed')){
 		notification.classList.remove('closed')
 	}

@@ -2,13 +2,39 @@
 /* colors; #e85e5e:#7c6f67 */
 /* colors; 97, 189, 182,:167, 155, 91, */
 /* colors; 232, 94, 94,:124, 111, 103, */
+#notification-wrapper{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background-color: #00000058;
+    z-index: 88888;
+
+}
 #notification{
-    width:500px;
-    height:400px;
-    background-color: #ffffff33;
+    text-align: center;
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:600px;
+    background-color: #fffffff0;
+    transform: translate(-50%, -50%);
+    z-index: 800;
+    cursor: pointer;
 }
 .closed{
     display: none;
+}
+#notification p{
+    line-height: 40px;
+    font-size: 14px;
+
+}
+#notification a{
+    font-size: 20px;
+    color: #3b5998;
+
 }
 
 	html body { background-color: #e3e2d7;  }

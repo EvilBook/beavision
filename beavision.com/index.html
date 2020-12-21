@@ -861,6 +861,20 @@ $('#gs-contact-form').bind('submit', function(event) {
 });
 
 </script>
+<div id="notification" class="closed"><div id="title"><h1>Важно!</h1></div><div id="notif-body"><span>За продуктови цени, пълен каталог и други запитваня моля пишете на <email>beavision2000@yahoo.com</email> или се обадете на София: 02 988 25 43, факс 02 988 25 43, GSM 0898 58 25 43; Пловдив: 032 23 10 40, GSM 0898 58 60 06; Плевен: 064 80 16 72, GSM 0898 58 39 87</span></div></div>
+
+<script>
+	let seen=document.cookie
+	let notification=document.getElementById('notification')
+	if(notification.classList.contains('closed')){
+		notification.classList.remove('closed')
+	}
+	notification.addEventListener('click',()=>{
+		if(!notification.classList.contains('closed')){
+			notification.classList.add('closed')
+		}
+	})
+</script>
 
 
 	

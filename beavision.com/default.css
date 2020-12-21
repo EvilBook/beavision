@@ -2,6 +2,14 @@
 /* colors; #e85e5e:#7c6f67 */
 /* colors; 97, 189, 182,:167, 155, 91, */
 /* colors; 232, 94, 94,:124, 111, 103, */
+#notification{
+    width:500px;
+    height:400px;
+    background-color: #ffffff33;
+}
+.closed{
+    display: none;
+}
 
 	html body { background-color: #e3e2d7;  }
 	
